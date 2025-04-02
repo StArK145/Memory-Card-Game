@@ -1,66 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memory Card Game</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="container">
-        <h1>Memory Card Game</h1>
-        
-        <div class="game-header">
-            <div class="stats">
-                <div class="stat-box">
-                    <p>Time</p>
-                    <p id="timer">60</p>
-                </div>
-                <div class="stat-box">
-                    <p>Moves</p>
-                    <p id="moves">0</p>
-                </div>
-                <div class="stat-box">
-                    <p>Score</p>
-                    <p id="score">0</p>
-                </div>
-            </div>
-            <div class="stat-box">
-                <p>Best Score</p>
-                <p id="best-score">0</p>
-            </div>
+      <h1>Memory Card Game</h1>
+
+      <div class="game-header">
+        <div class="stats">
+          <div class="stat-box">
+            <p>Time</p>
+            <p id="timer">60</p>
+          </div>
+          <div class="stat-box">
+            <p>Moves</p>
+            <p id="moves">0</p>
+          </div>
+          <div class="stat-box">
+            <p>Score</p>
+            <p id="score">0</p>
+          </div>
         </div>
-        
-        <div class="difficulty-controls">
-            <button id="easy" class="active-difficulty" onclick="setDifficulty('easy')">4x4</button>
-            <button id="medium" onclick="setDifficulty('medium')">5x5</button>
-            <button id="hard" onclick="setDifficulty('hard')">6x6</button>
+        <div class="stat-box">
+          <p>Best Score</p>
+          <p id="best-score">0</p>
         </div>
-        
-        <div id="game-board"></div>
-        
-        <div class="progress-bar">
-            <div id="progress-fill" class="progress-fill" style="width: 100%"></div>
-            </div>
-            
-            <div class="game-footer">
-                <div class="controls">
-                <button onclick="resetGame()">Restart</button>
-                <button id="pause-btn" onclick="togglePause()">Pause</button>
-                </div>
-                <button onclick="toggleSound()" id="sound-btn">🔊</button>
-                </div>
-                </div>
-                
-                <div id="message" class="message">
-                    <h2 id="message-title">Game Over</h2>
-        <p id="message-text">You ran out of time!</p>
-        <div class="message-buttons">
-            <button onclick="closeMessage(); resetGame();">Play Again</button>
-            </div>
-            </div>
-            
-        
-<script src="./main.js"></script>
-</body>
+      </div>
+
+      <div class="difficulty-controls">
+        <button
+          id="easy"
+          class="active-difficulty"
+          onclick="setDifficulty('easy')"
+        >
+          4x4
+        </button>
+        <button id="medium" onclick="setDifficulty('medium')">5x5</button>
+        <button id="hard" onclick="setDifficulty('hard')">6x6</button>
+      </div>
+
+      <div id="game-board"></div>
+
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill" style="width: 100%"></div>
+      </div>
+
+      <div class="game-footer">
+        <div class="controls">
+          <button id="start-btn" onclick="startGame()">Start</button>
+          <button id="pause-btn" onclick="togglePause()" disabled>Pause</button>
+          <button onclick="resetGame()">Restart</button>
+        </div>
+        <button onclick="toggleSound()" id="sound-btn">🔊</button>
+      </div>
+    </div>
+
+    <div id="message" class="message">
+      <h2 id="message-title">Game Over</h2>
+      <p id="message-text">You ran out of time!</p>
+      <div class="message-buttons">
+        <button onclick="closeMessage(); resetGame();">Play Again</button>
+      </div>
+    </div>
+
+    <script src="./main.js"></script>
+  </body>
 </html>

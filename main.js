@@ -23,11 +23,135 @@ let score = 0;
 let moves = 0;
 let isPaused = false;
 let soundEnabled = true;
+let isGameStarted = false;
+
+let timeRemaining = 60;
 let bestScores = JSON.parse(localStorage.getItem("bestScores")) || {
 easy: 0,
 medium: 0,
 hard: 0
 };
+
+// Function to start the game
+function startGame() {
+    if (!isGameStarted) {
+      isGameStarted = true;
+      isPaused = false;
+      
+      // Update UI
+      document.getElementById('start-btn').textContent = 'Stop';
+      document.getElementById('pause-btn').disabled = false;
+      
+      // Start the timer
+      startTimer();
+      
+      // Enable all cards
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.style.pointerEvents = 'auto';
+      });
+    } else {
+      stopGame();
+    }
+  }
+
+  // Function to stop the game
+function stopGame() {
+    isGameStarted = false;
+    isPaused = false;
+    
+    // Update UI
+    document.getElementById('start-btn').textContent = 'Start';
+    document.getElementById('pause-btn').textContent = 'Pause';
+    document.getElementById('pause-btn').disabled = true;
+    
+    // Clear the timer
+    clearInterval(timer);
+    
+    // Reset the timer display
+    timeRemaining = 60; // Reset to default time
+    document.getElementById('timer').textContent = timeRemaining;
+    
+    // Reset progress bar
+    document.getElementById('progress-fill').style.width = '100%';
+    
+    // Disable all cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.style.pointerEvents = 'none';
+    });
+  }
+
+  // Function to pause/resume the game
+function togglePause() {
+    if (!isGameStarted) return;
+    
+    isPaused = !isPaused;
+    
+    if (isPaused) {
+      // Pause the game
+      document.getElementById('pause-btn').textContent = 'Resume';
+      clearInterval(timer);
+      
+      // Disable all cards
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.style.pointerEvents = 'none';
+      });
+    } else {
+      // Resume the game
+      document.getElementById('pause-btn').textContent = 'Pause';
+      startTimer();
+      
+      // Enable all cards
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        if (!card.classList.contains('matched')) {
+          card.style.pointerEvents = 'auto';
+        }
+      });
+    }
+  }
+
+  // Function to start the timer
+function startTimer() {
+    clearInterval(timer);
+    
+    const timerElement = document.getElementById('timer');
+    const progressFill = document.getElementById('progress-fill');
+    const totalTime = timeRemaining;
+    
+    timer = setInterval(() => {
+      if (timeRemaining <= 0) {
+        clearInterval(timer);
+        gameOver('Time\'s up!');
+        return;
+      }
+      
+      timeRemaining--;
+      timerElement.textContent = timeRemaining;
+      
+      // Update progress bar
+      const progressWidth = (timeRemaining / totalTime) * 100;
+      progressFill.style.width = `${progressWidth}%`;
+    }, 1000);
+  }
+
+  // Function to handle game over
+function gameOver(message) {
+    isGameStarted = false;
+    
+    // Show game over message
+    document.getElementById('message-title').textContent = 'Game Over';
+    document.getElementById('message-text').textContent = message;
+    document.getElementById('message').style.display = 'block';
+    
+    // Disable all cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.style.pointerEvents = 'none';
+    });
+  }
 
 // Set difficulty level and update UI
 function setDifficulty(level) {
@@ -204,34 +328,34 @@ lockBoard = false;
 }
 
 // Start/update the game timer
-function startTimer() {
-const timerDisplay = document.getElementById("timer");
-let timeLeft = gameTime;
-timerDisplay.textContent = timeLeft;
+// function startTimer() {
+// const timerDisplay = document.getElementById("timer");
+// let timeLeft = gameTime;
+// timerDisplay.textContent = timeLeft;
 
-// Update progress bar width
-document.getElementById("progress-fill").style.width = "100%";
+// // Update progress bar width
+// document.getElementById("progress-fill").style.width = "100%";
 
-// Clear any existing timer
-if (timer) clearInterval(timer);
+// // Clear any existing timer
+// if (timer) clearInterval(timer);
 
-timer = setInterval(() => {
-if (!isPaused) {
- timeLeft--;
- timerDisplay.textContent = timeLeft;
+// timer = setInterval(() => {
+// if (!isPaused) {
+//  timeLeft--;
+//  timerDisplay.textContent = timeLeft;
  
- // Update progress bar
- const percentage = (timeLeft / gameTime) * 100;
- document.getElementById("progress-fill").style.width = `${percentage}%`;
+//  // Update progress bar
+//  const percentage = (timeLeft / gameTime) * 100;
+//  document.getElementById("progress-fill").style.width = `${percentage}%`;
  
- if (timeLeft <= 0) {
-     clearInterval(timer);
-     if (soundEnabled) sounds.gameOver.play();
-     showMessage("Time's Up!", `Your final score: ${score}`, "⏱️");
- }
-}
-}, 1000);
-}
+//  if (timeLeft <= 0) {
+//      clearInterval(timer);
+//      if (soundEnabled) sounds.gameOver.play();
+//      showMessage("Time's Up!", `Your final score: ${score}`, "⏱️");
+//  }
+// }
+// }, 1000);
+// }
 
 // Toggle pause state
 function togglePause() {
@@ -287,7 +411,7 @@ document.getElementById("pause-btn").textContent = "Pause";
 generateBoard();
 
 // Start timer
-startTimer();
+// startTimer();
 
 // Close any open messages
 closeMessage();
